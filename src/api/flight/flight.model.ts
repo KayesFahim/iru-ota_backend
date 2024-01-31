@@ -2,17 +2,17 @@ import { IsInt, IsPositive, IsString, Length, ArrayMinSize, IsDateString, ArrayM
 import { ApiProperty } from '@nestjs/swagger';
 
 class SegmentDto {
-  @ApiProperty({ default: 'DAC' })
+  @ApiProperty({ default: 'LHR' })
   @IsString()
   @Length(3, 3)
   depfrom: string;
 
-  @ApiProperty({ default: 'DXB' })
+  @ApiProperty({ default: 'JFK' })
   @IsString()
   @Length(3, 3)
   arrto: string;
 
-  @ApiProperty( { default: '2024-01-01' })
+  @ApiProperty( { default: '2024-03-01' })
   @IsDateString()
   depdate: string;
 }
@@ -31,14 +31,14 @@ export class FlightSearchModel {
   @IsInt()
   infantcount: number;
 
-  @ApiProperty({ default: 2 })
-  @IsInt()
-  connection: number;
+//   @ApiProperty({ default: 2 })
+//   @IsInt()
+//   connection: number;
 
-  @ApiProperty({ default: 'Y' })
+  @ApiProperty({ default: 'Economy' })
   @IsString()
   @Length(1, 1)
-  cabinclass: string = 'Y';
+  cabinclass: string = 'economy';
 
   @ApiProperty({ type: [SegmentDto] })
   @ArrayMinSize(1)
