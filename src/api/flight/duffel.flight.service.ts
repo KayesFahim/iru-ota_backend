@@ -350,6 +350,7 @@ export class DuffelService {
                     });
 
                     const Itenary: any = {
+                        System : 'Duffel',
                         OutboundId: OutboundId,
                         OfferId: OfferId,
                         Caree: Carrier,
