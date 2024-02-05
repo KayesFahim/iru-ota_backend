@@ -93,6 +93,7 @@ export class DuffelService {
             const response = await axios.request(config);
             
             const result= response.data; 
+            //return result;
             const FlightOffers: any[] = result.data.offers || [];
             const AllFlights: any[] = [];
             if (FlightOffers.length > 0) {
@@ -102,12 +103,12 @@ export class DuffelService {
                     const Currency: string = FlightOffer.base_currency;
                     const Carrier: string = FlightOffer.owner.name;
                     const CarrierLogo: string = FlightOffer.owner.logo_symbol_url;
-                    const BaseFare = FlightOffer.base_amount;
-                    const Taxes: number = Math.ceil(FlightOffer.tax_amount);
-                    const TotalFare: number = BaseFare + Taxes;
+                    const BaseFare : string = FlightOffer.base_amount;
+                    const Taxes: string = FlightOffer.tax_amount;
+                    const TotalFare: string = FlightOffer.total_amount;
                     const PaymentType: any = FlightOffer.payment_requirements;
-                    const FareRules: any = FlightOffer.conditions;
-                    const Passengers: any = FlightOffer.passengers;
+                    const FareRules: any[] = FlightOffer.conditions;
+                    const Passengers: any[] = FlightOffer.passengers;
                     const AllSegmentData: any[] = FlightOffer.slices;
                     const CabinClass: string = AllSegmentData[0].segments[0].passengers[0].cabin_class_marketing_name;
 
