@@ -140,23 +140,23 @@ export class DuffelService {
                             const Baggage: any = Segment.passengers[0].baggages;
 
                             const SingleSegment: any = {
-                                DepFrom: Origin,
-                                DepAirport: OriginAirport,
-                                DepCountry: OriginCountry,
-                                DepTime: DepTime,
-                                ArrTo: Destination,
-                                ArrAirport: DestinationAirport,
-                                ArrCountry: DestinationCountry,
-                                ArrTime: ArrTime,
-                                MarkettingCarrier: MarkettingCarrier,
-                                MarkettingCarrierName: MarkettingCarrierName,
-                                MarkettingCarrierNumber: MarkettingCarrierNumber,
-                                OperatingCarrier: OperatingCarrier,
-                                OperatingCarrierName: OperatingCarrierName,
-                                OperatingCarrierNumber: OperatingCarrierNumber,
-                                AircraftModel: AirCraftModel,
-                                Duration: Duration,
-                                Baggage: Baggage
+                                departure_from: Origin,
+                                departure_airport: OriginAirport,
+                                departure_ountry: OriginCountry,
+                                departure_time: DepTime,
+                                arrival_to: Destination,
+                                arrival_airport: DestinationAirport,
+                                arrival_country: DestinationCountry,
+                                arrival_time: ArrTime,
+                                marketting_carrier: MarkettingCarrier,
+                                marketting_carrier_name: MarkettingCarrierName,
+                                marketting_carrier_number: MarkettingCarrierNumber,
+                                operating_carrier: OperatingCarrier,
+                                operating_carrier_name: OperatingCarrierName,
+                                operating_carrier_number: OperatingCarrierNumber,
+                                aircraft_model: AirCraftModel,
+                                duration: Duration,
+                                baggage: Baggage
                             };
 
                             SegmentArray.push(SingleSegment);
@@ -164,19 +164,19 @@ export class DuffelService {
                     });
 
                     const Itenary: any = {
-                        OfferId: OfferId,
-                        Caree: Carrier,
-                        Emissions: Emissions,
-                        CarrierLogo: CarrierLogo,
-                        BaseFare: BaseFare,
-                        Taxes: Taxes,
-                        TotalFare: TotalFare,
-                        Currency: Currency,
-                        Passengers: Passengers,
-                        InstantPayment: PaymentType.requires_instant_payment,
-                        FareRules: FareRules,
-                        CabinClass: CabinClass,
-                        Segments: SegmentArray
+                        offer_id: OfferId,
+                        carrier: Carrier,
+                        emissions: Emissions,
+                        carrier_logo: CarrierLogo,
+                        base_fare: BaseFare,
+                        taxes: Taxes,
+                        total_fare: TotalFare,
+                        currency: Currency,
+                        passengers: Passengers,
+                        instant_payment: PaymentType.requires_instant_payment,
+                        fare_rules: FareRules,
+                        cabin_class: CabinClass,
+                        segments: SegmentArray
                     };
 
                     AllFlights.push(Itenary);
