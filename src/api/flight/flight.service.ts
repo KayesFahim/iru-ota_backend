@@ -13,19 +13,19 @@ export class FlightService {
     return FlightData;
   }
 
-  async OutBoundFare(createFlightDto: FlightSearchModel) {
-    const FlightData = await this.duffelService.OutBoundFare(createFlightDto);
-    return FlightData;
-  }
+  // async OutBoundFare(createFlightDto: FlightSearchModel) {
+  //   const FlightData = await this.duffelService.OutBoundFare(createFlightDto);
+  //   return FlightData;
+  // }
 
-  async InBoundFare(outboundId : string, offerId : string){
-    const FlightData = await this.duffelService.InBoundFare(outboundId, offerId);
-    return FlightData;
-  }
+  // async InBoundFare(outboundId : string, offerId : string){
+  //   const FlightData = await this.duffelService.InBoundFare(outboundId, offerId);
+  //   return FlightData;
+  // }
 
-  async SelectFare(outboundId : string, inboundId : string) {
-    const FlightData = await this.duffelService.SelectFare(outboundId, inboundId);
-    return FlightData;
-  }
+  // async SelectFare(outboundId : string, inboundId : string) {
+  //   const FlightData = await this.duffelService.SelectFare(outboundId, inboundId);
+  //   return FlightData;
+  // }
 
 }

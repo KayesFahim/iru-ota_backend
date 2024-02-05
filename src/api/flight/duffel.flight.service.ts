@@ -9,15 +9,16 @@ export class DuffelService {
 
     async airSearch(createFlightDto  : FlightSearchModel){
         const Slices = createFlightDto.segments;
-        const AdultCount = createFlightDto.adultcount;
-        const ChildCount = createFlightDto.childcount;
-        const InfantCount = createFlightDto.infantcount;
-        const Class = createFlightDto.cabinclass;
+        const AdultCount = createFlightDto.adult_count;
+        const ChildCount = createFlightDto.child_count;
+        const InfantCount = createFlightDto.infant_count;
+        const Class = createFlightDto.cabin_class;
+        const Connection  = createFlightDto.connection;
 
         const SliceArray = Slices.map((slics: any) => ({
-            origin: slics.depfrom,
-            destination: slics.arrto,
-            departure_date: slics.depdate
+            origin: slics.departure_from,
+            destination: slics.arrival_to,
+            departure_date: slics.departure_date
         }));
 
         const AllSlice = JSON.stringify(SliceArray);
@@ -68,7 +69,7 @@ export class DuffelService {
             "data": {
                 "slices": ${AllSlice},
                 "passengers": ${Passenger},
-                "max_connections": 2,
+                "max_connections": ${Connection},
                 "cabin_class": "${Class}"
             }
         }`;
@@ -192,338 +193,338 @@ export class DuffelService {
         }
     }
 
-    async OutBoundFare(createFlightDto  : FlightSearchModel){
-        const Slices = createFlightDto.segments;
-        const AdultCount = createFlightDto.adultcount;
-        const ChildCount = createFlightDto.childcount;
-        const InfantCount = createFlightDto.infantcount;
-        const Class = createFlightDto.cabinclass;
+    // async OutBoundFare(createFlightDto  : FlightSearchModel){
+    //     const Slices = createFlightDto.segments;
+    //     const AdultCount = createFlightDto.adultcount;
+    //     const ChildCount = createFlightDto.childcount;
+    //     const InfantCount = createFlightDto.infantcount;
+    //     const Class = createFlightDto.cabinclass;
 
-        const SliceArray = Slices.map((slics: any) => ({
-            origin: slics.depfrom,
-            destination: slics.arrto,
-            departure_date: slics.depdate
-        }));
+    //     const SliceArray = Slices.map((slics: any) => ({
+    //         origin: slics.depfrom,
+    //         destination: slics.arrto,
+    //         departure_date: slics.depdate
+    //     }));
 
-        const AllSlice = JSON.stringify(SliceArray);
+    //     const AllSlice = JSON.stringify(SliceArray);
 
-        const Passengers = [];
+    //     const Passengers = [];
 
-        if (AdultCount > 0 && ChildCount > 0 && InfantCount > 0) {
-        for (let i = 0; i < AdultCount; i++) {
-            Passengers.push({ type: "adult" });
-        }
+    //     if (AdultCount > 0 && ChildCount > 0 && InfantCount > 0) {
+    //     for (let i = 0; i < AdultCount; i++) {
+    //         Passengers.push({ type: "adult" });
+    //     }
 
-        for (let i = 0; i < ChildCount; i++) {
-            Passengers.push({ type: "child" });
-        }
+    //     for (let i = 0; i < ChildCount; i++) {
+    //         Passengers.push({ type: "child" });
+    //     }
 
-        for (let i = 0; i < InfantCount; i++) {
-            Passengers.push({ type: "infant_without_seat" });
-        }
-        } else if (AdultCount > 0 && ChildCount > 0) {
-        for (let i = 0; i < AdultCount; i++) {
-            Passengers.push({ type: "adult" });
-        }
+    //     for (let i = 0; i < InfantCount; i++) {
+    //         Passengers.push({ type: "infant_without_seat" });
+    //     }
+    //     } else if (AdultCount > 0 && ChildCount > 0) {
+    //     for (let i = 0; i < AdultCount; i++) {
+    //         Passengers.push({ type: "adult" });
+    //     }
 
-        for (let i = 0; i < ChildCount; i++) {
-            Passengers.push({ type: "child" });
-        }
+    //     for (let i = 0; i < ChildCount; i++) {
+    //         Passengers.push({ type: "child" });
+    //     }
 
-        for (let i = 0; i < InfantCount; i++) {
-            Passengers.push({ type: "infant_without_seat" });
-        }
-        } else if (AdultCount > 0 && InfantCount > 0) {
-        for (let i = 0; i < AdultCount; i++) {
-            Passengers.push({ type: "adult" });
-        }
+    //     for (let i = 0; i < InfantCount; i++) {
+    //         Passengers.push({ type: "infant_without_seat" });
+    //     }
+    //     } else if (AdultCount > 0 && InfantCount > 0) {
+    //     for (let i = 0; i < AdultCount; i++) {
+    //         Passengers.push({ type: "adult" });
+    //     }
 
-        for (let i = 0; i < InfantCount; i++) {
-            Passengers.push({ type: "infant_without_seat" });
-        }
-        } else if (AdultCount > 0) {
-        for (let i = 0; i < AdultCount; i++) {
-            Passengers.push({ type: "adult" });
-        }
-        }
+    //     for (let i = 0; i < InfantCount; i++) {
+    //         Passengers.push({ type: "infant_without_seat" });
+    //     }
+    //     } else if (AdultCount > 0) {
+    //     for (let i = 0; i < AdultCount; i++) {
+    //         Passengers.push({ type: "adult" });
+    //     }
+    //     }
 
-        const Passenger = JSON.stringify(Passengers);
+    //     const Passenger = JSON.stringify(Passengers);
 
-        const data = `{
-            "data": {
-                "slices": ${AllSlice},
-                "passengers": ${Passenger},
-                "max_connections": 2,
-                "cabin_class": "${Class}"
-            }
-        }`;
+    //     const data = `{
+    //         "data": {
+    //             "slices": ${AllSlice},
+    //             "passengers": ${Passenger},
+    //             "max_connections": 2,
+    //             "cabin_class": "${Class}"
+    //         }
+    //     }`;
 
-        let config = {
-            method: 'post',
-            maxBodyLength: Infinity,
-            url: process.env.DUFFEL_PARTIAL_OFFER_REQ,
-            headers: { 
-                'Accept-Encoding': 'gzip', 
-                'Accept': 'application/json', 
-                'Duffel-Version': 'v1', 
-                'Content-Type': 'application/json', 
-                'Authorization': 'Bearer '+`${process.env.DUFFEL_TOKEN_TEST}`
-              },
-            data : data
-          };
+    //     let config = {
+    //         method: 'post',
+    //         maxBodyLength: Infinity,
+    //         url: process.env.DUFFEL_PARTIAL_OFFER_REQ,
+    //         headers: { 
+    //             'Accept-Encoding': 'gzip', 
+    //             'Accept': 'application/json', 
+    //             'Duffel-Version': 'v1', 
+    //             'Content-Type': 'application/json', 
+    //             'Authorization': 'Bearer '+`${process.env.DUFFEL_TOKEN_TEST}`
+    //           },
+    //         data : data
+    //       };
 
 
-        try{
-            const response = await axios.request(config);
+    //     try{
+    //         const response = await axios.request(config);
             
-            const result = response.data; 
-            const FlightOffers: any[] = result.data.offers || [];
-            const AllFlights: any[] = [];
-            const OutboundId : string = result.data.id || '';
-            if (FlightOffers.length > 0) {
-                FlightOffers.forEach((FlightOffer: any) => {
-                    const OfferId: string = FlightOffer.id;
-                    const Emissions: string = FlightOffer.total_emissions_kg;
-                    const Currency: string = FlightOffer.base_currency;
-                    const Carrier: string = FlightOffer.owner.name;
-                    const CarrierLogo: string = FlightOffer.owner.logo_symbol_url;
-                    const BaseFare = FlightOffer.base_amount;
-                    const Taxes: number = Math.ceil(FlightOffer.tax_amount);
-                    const TotalFare: number = BaseFare + Taxes;
-                    const PaymentType: any = FlightOffer.payment_requirements;
-                    const FareRules: any = FlightOffer.conditions;
-                    const Passengers: any = FlightOffer.passengers;
-                    const AllSegmentData: any[] = FlightOffer.slices;
-                    const CabinClass: string = AllSegmentData[0].segments[0].passengers[0].cabin_class_marketing_name;
+    //         const result = response.data; 
+    //         const FlightOffers: any[] = result.data.offers || [];
+    //         const AllFlights: any[] = [];
+    //         const OutboundId : string = result.data.id || '';
+    //         if (FlightOffers.length > 0) {
+    //             FlightOffers.forEach((FlightOffer: any) => {
+    //                 const OfferId: string = FlightOffer.id;
+    //                 const Emissions: string = FlightOffer.total_emissions_kg;
+    //                 const Currency: string = FlightOffer.base_currency;
+    //                 const Carrier: string = FlightOffer.owner.name;
+    //                 const CarrierLogo: string = FlightOffer.owner.logo_symbol_url;
+    //                 const BaseFare = FlightOffer.base_amount;
+    //                 const Taxes: number = Math.ceil(FlightOffer.tax_amount);
+    //                 const TotalFare: number = BaseFare + Taxes;
+    //                 const PaymentType: any = FlightOffer.payment_requirements;
+    //                 const FareRules: any = FlightOffer.conditions;
+    //                 const Passengers: any = FlightOffer.passengers;
+    //                 const AllSegmentData: any[] = FlightOffer.slices;
+    //                 const CabinClass: string = AllSegmentData[0].segments[0].passengers[0].cabin_class_marketing_name;
 
-                    const SegmentArray: any[] = [];
+    //                 const SegmentArray: any[] = [];
 
-                    AllSegmentData.forEach((LegSegmentData: any) => {
-                        const SegmentData: any[] = LegSegmentData.segments;
+    //                 AllSegmentData.forEach((LegSegmentData: any) => {
+    //                     const SegmentData: any[] = LegSegmentData.segments;
 
-                        SegmentData.forEach((Segment: any) => {
-                            const Origin: string = Segment.origin.iata_code;
-                            const OriginAirport: string = Segment.origin.name;
-                            const OriginCountry: string = `${Segment.origin.city_name}, ${Segment.origin.iata_country_code}`;
+    //                     SegmentData.forEach((Segment: any) => {
+    //                         const Origin: string = Segment.origin.iata_code;
+    //                         const OriginAirport: string = Segment.origin.name;
+    //                         const OriginCountry: string = `${Segment.origin.city_name}, ${Segment.origin.iata_country_code}`;
 
-                            const Destination: string = Segment.destination.iata_code;
-                            const DestinationAirport: string = Segment.destination.name;
-                            const DestinationCountry: string = `${Segment.destination.city_name}, ${Segment.destination.iata_country_code}`;
+    //                         const Destination: string = Segment.destination.iata_code;
+    //                         const DestinationAirport: string = Segment.destination.name;
+    //                         const DestinationCountry: string = `${Segment.destination.city_name}, ${Segment.destination.iata_country_code}`;
 
-                            const DepTime: string = Segment.departing_at;
-                            const ArrTime: string = Segment.arriving_at;
+    //                         const DepTime: string = Segment.departing_at;
+    //                         const ArrTime: string = Segment.arriving_at;
 
-                            const MarkettingCarrier: string = Segment.marketing_carrier.iata_code;
-                            const MarkettingCarrierName: string = Segment.marketing_carrier.name;
-                            const MarkettingCarrierNumber: string = Segment.marketing_carrier_flight_number;
+    //                         const MarkettingCarrier: string = Segment.marketing_carrier.iata_code;
+    //                         const MarkettingCarrierName: string = Segment.marketing_carrier.name;
+    //                         const MarkettingCarrierNumber: string = Segment.marketing_carrier_flight_number;
 
-                            const OperatingCarrier: string = Segment.operating_carrier.iata_code;
-                            const OperatingCarrierName: string = Segment.operating_carrier.name;
-                            const OperatingCarrierNumber: string = Segment.operating_carrier_flight_number;
+    //                         const OperatingCarrier: string = Segment.operating_carrier.iata_code;
+    //                         const OperatingCarrierName: string = Segment.operating_carrier.name;
+    //                         const OperatingCarrierNumber: string = Segment.operating_carrier_flight_number;
 
-                            const AirCraftModel: string = Segment.aircraft?.name || '';
-                            const Duration: number = Segment.duration;
-                            const Baggage: any = Segment.passengers[0].baggages;
+    //                         const AirCraftModel: string = Segment.aircraft?.name || '';
+    //                         const Duration: number = Segment.duration;
+    //                         const Baggage: any = Segment.passengers[0].baggages;
 
-                            const SingleSegment: any = {
-                                DepFrom: Origin,
-                                DepAirport: OriginAirport,
-                                DepCountry: OriginCountry,
-                                DepTime: DepTime,
-                                ArrTo: Destination,
-                                ArrAirport: DestinationAirport,
-                                ArrCountry: DestinationCountry,
-                                ArrTime: ArrTime,
-                                MarkettingCarrier: MarkettingCarrier,
-                                MarkettingCarrierName: MarkettingCarrierName,
-                                MarkettingCarrierNumber: MarkettingCarrierNumber,
-                                OperatingCarrier: OperatingCarrier,
-                                OperatingCarrierName: OperatingCarrierName,
-                                OperatingCarrierNumber: OperatingCarrierNumber,
-                                AircraftModel: AirCraftModel,
-                                Duration: Duration,
-                                Baggage: Baggage
-                            };
+    //                         const SingleSegment: any = {
+    //                             DepFrom: Origin,
+    //                             DepAirport: OriginAirport,
+    //                             DepCountry: OriginCountry,
+    //                             DepTime: DepTime,
+    //                             ArrTo: Destination,
+    //                             ArrAirport: DestinationAirport,
+    //                             ArrCountry: DestinationCountry,
+    //                             ArrTime: ArrTime,
+    //                             MarkettingCarrier: MarkettingCarrier,
+    //                             MarkettingCarrierName: MarkettingCarrierName,
+    //                             MarkettingCarrierNumber: MarkettingCarrierNumber,
+    //                             OperatingCarrier: OperatingCarrier,
+    //                             OperatingCarrierName: OperatingCarrierName,
+    //                             OperatingCarrierNumber: OperatingCarrierNumber,
+    //                             AircraftModel: AirCraftModel,
+    //                             Duration: Duration,
+    //                             Baggage: Baggage
+    //                         };
 
-                            SegmentArray.push(SingleSegment);
-                        });
-                    });
+    //                         SegmentArray.push(SingleSegment);
+    //                     });
+    //                 });
 
-                    const Itenary: any = {
-                        System : 'Duffel',
-                        OutboundId: OutboundId,
-                        OfferId: OfferId,
-                        Caree: Carrier,
-                        Emissions: Emissions,
-                        CarrierLogo: CarrierLogo,
-                        BaseFare: BaseFare,
-                        Taxes: Taxes,
-                        TotalFare: TotalFare,
-                        Currency: Currency,
-                        Passengers: Passengers,
-                        InstantPayment: PaymentType.requires_instant_payment,
-                        FareRules: FareRules,
-                        CabinClass: CabinClass,
-                        Segments: SegmentArray
-                    };
+    //                 const Itenary: any = {
+    //                     System : 'Duffel',
+    //                     OutboundId: OutboundId,
+    //                     OfferId: OfferId,
+    //                     Caree: Carrier,
+    //                     Emissions: Emissions,
+    //                     CarrierLogo: CarrierLogo,
+    //                     BaseFare: BaseFare,
+    //                     Taxes: Taxes,
+    //                     TotalFare: TotalFare,
+    //                     Currency: Currency,
+    //                     Passengers: Passengers,
+    //                     InstantPayment: PaymentType.requires_instant_payment,
+    //                     FareRules: FareRules,
+    //                     CabinClass: CabinClass,
+    //                     Segments: SegmentArray
+    //                 };
 
-                    AllFlights.push(Itenary);
-                });
+    //                 AllFlights.push(Itenary);
+    //             });
 
-                return AllFlights;
-            } else { 
-                return AllFlights;
-            }
-        }catch(err){
-            console.log(err);
-        }
-    }
+    //             return AllFlights;
+    //         } else { 
+    //             return AllFlights;
+    //         }
+    //     }catch(err){
+    //         console.log(err);
+    //     }
+    // }
 
-    async InBoundFare(outboundId: string, offerId: string){
+    // async InBoundFare(outboundId: string, offerId: string){
 
-        const url = `https://api.duffel.com/air/partial_offer_requests/${outboundId}`;
-        let config = {
-            method: 'get',
-            maxBodyLength: Infinity,
-            url: url,
-            headers: { 
-                'Accept-Encoding': 'gzip', 
-                'Accept': 'application/json', 
-                'Duffel-Version': 'v1', 
-                'Content-Type': 'application/json', 
-                'Authorization': 'Bearer '+`${process.env.DUFFEL_TOKEN_TEST}`
-            }
-          };
+    //     const url = `https://api.duffel.com/air/partial_offer_requests/${outboundId}`;
+    //     let config = {
+    //         method: 'get',
+    //         maxBodyLength: Infinity,
+    //         url: url,
+    //         headers: { 
+    //             'Accept-Encoding': 'gzip', 
+    //             'Accept': 'application/json', 
+    //             'Duffel-Version': 'v1', 
+    //             'Content-Type': 'application/json', 
+    //             'Authorization': 'Bearer '+`${process.env.DUFFEL_TOKEN_TEST}`
+    //         }
+    //       };
 
 
-          try{
-            const response = await axios.request(config);
+    //       try{
+    //         const response = await axios.request(config);
             
-            const result = response.data; 
-            const FlightOffers: any[] = result.data.offers || [];
-            const AllFlights: any[] = [];
-            const InboundId : string = result.data.id || '';
-            if (FlightOffers.length > 0) {
-                FlightOffers.forEach((FlightOffer: any) => {
-                    const OfferId: string = FlightOffer.id;
-                    const Emissions: string = FlightOffer.total_emissions_kg;
-                    const Currency: string = FlightOffer.base_currency;
-                    const Carrier: string = FlightOffer.owner.name;
-                    const CarrierLogo: string = FlightOffer.owner.logo_symbol_url;
-                    const BaseFare = FlightOffer.base_amount;
-                    const Taxes: number = Math.ceil(FlightOffer.tax_amount);
-                    const TotalFare: number = BaseFare + Taxes;
-                    const PaymentType: any = FlightOffer.payment_requirements;
-                    const FareRules: any = FlightOffer.conditions;
-                    const Passengers: any = FlightOffer.passengers;
-                    const AllSegmentData: any[] = FlightOffer.slices;
-                    const CabinClass: string = AllSegmentData[0].segments[0].passengers[0].cabin_class_marketing_name;
+    //         const result = response.data; 
+    //         const FlightOffers: any[] = result.data.offers || [];
+    //         const AllFlights: any[] = [];
+    //         const InboundId : string = result.data.id || '';
+    //         if (FlightOffers.length > 0) {
+    //             FlightOffers.forEach((FlightOffer: any) => {
+    //                 const OfferId: string = FlightOffer.id;
+    //                 const Emissions: string = FlightOffer.total_emissions_kg;
+    //                 const Currency: string = FlightOffer.base_currency;
+    //                 const Carrier: string = FlightOffer.owner.name;
+    //                 const CarrierLogo: string = FlightOffer.owner.logo_symbol_url;
+    //                 const BaseFare = FlightOffer.base_amount;
+    //                 const Taxes: number = Math.ceil(FlightOffer.tax_amount);
+    //                 const TotalFare: number = BaseFare + Taxes;
+    //                 const PaymentType: any = FlightOffer.payment_requirements;
+    //                 const FareRules: any = FlightOffer.conditions;
+    //                 const Passengers: any = FlightOffer.passengers;
+    //                 const AllSegmentData: any[] = FlightOffer.slices;
+    //                 const CabinClass: string = AllSegmentData[0].segments[0].passengers[0].cabin_class_marketing_name;
 
-                    const SegmentArray: any[] = [];
+    //                 const SegmentArray: any[] = [];
 
-                    AllSegmentData.forEach((LegSegmentData: any) => {
-                        const SegmentData: any[] = LegSegmentData.segments;
+    //                 AllSegmentData.forEach((LegSegmentData: any) => {
+    //                     const SegmentData: any[] = LegSegmentData.segments;
 
-                        SegmentData.forEach((Segment: any) => {
-                            const Origin: string = Segment.origin.iata_code;
-                            const OriginAirport: string = Segment.origin.name;
-                            const OriginCountry: string = `${Segment.origin.city_name}, ${Segment.origin.iata_country_code}`;
+    //                     SegmentData.forEach((Segment: any) => {
+    //                         const Origin: string = Segment.origin.iata_code;
+    //                         const OriginAirport: string = Segment.origin.name;
+    //                         const OriginCountry: string = `${Segment.origin.city_name}, ${Segment.origin.iata_country_code}`;
 
-                            const Destination: string = Segment.destination.iata_code;
-                            const DestinationAirport: string = Segment.destination.name;
-                            const DestinationCountry: string = `${Segment.destination.city_name}, ${Segment.destination.iata_country_code}`;
+    //                         const Destination: string = Segment.destination.iata_code;
+    //                         const DestinationAirport: string = Segment.destination.name;
+    //                         const DestinationCountry: string = `${Segment.destination.city_name}, ${Segment.destination.iata_country_code}`;
 
-                            const DepTime: string = Segment.departing_at;
-                            const ArrTime: string = Segment.arriving_at;
+    //                         const DepTime: string = Segment.departing_at;
+    //                         const ArrTime: string = Segment.arriving_at;
 
-                            const MarkettingCarrier: string = Segment.marketing_carrier.iata_code;
-                            const MarkettingCarrierName: string = Segment.marketing_carrier.name;
-                            const MarkettingCarrierNumber: string = Segment.marketing_carrier_flight_number;
+    //                         const MarkettingCarrier: string = Segment.marketing_carrier.iata_code;
+    //                         const MarkettingCarrierName: string = Segment.marketing_carrier.name;
+    //                         const MarkettingCarrierNumber: string = Segment.marketing_carrier_flight_number;
 
-                            const OperatingCarrier: string = Segment.operating_carrier.iata_code;
-                            const OperatingCarrierName: string = Segment.operating_carrier.name;
-                            const OperatingCarrierNumber: string = Segment.operating_carrier_flight_number;
+    //                         const OperatingCarrier: string = Segment.operating_carrier.iata_code;
+    //                         const OperatingCarrierName: string = Segment.operating_carrier.name;
+    //                         const OperatingCarrierNumber: string = Segment.operating_carrier_flight_number;
 
-                            const AirCraftModel: string = Segment.aircraft?.name || '';
-                            const Duration: number = Segment.duration;
-                            const Baggage: any = Segment.passengers[0].baggages;
+    //                         const AirCraftModel: string = Segment.aircraft?.name || '';
+    //                         const Duration: number = Segment.duration;
+    //                         const Baggage: any = Segment.passengers[0].baggages;
 
-                            const SingleSegment: any = {
-                                DepFrom: Origin,
-                                DepAirport: OriginAirport,
-                                DepCountry: OriginCountry,
-                                DepTime: DepTime,
-                                ArrTo: Destination,
-                                ArrAirport: DestinationAirport,
-                                ArrCountry: DestinationCountry,
-                                ArrTime: ArrTime,
-                                MarkettingCarrier: MarkettingCarrier,
-                                MarkettingCarrierName: MarkettingCarrierName,
-                                MarkettingCarrierNumber: MarkettingCarrierNumber,
-                                OperatingCarrier: OperatingCarrier,
-                                OperatingCarrierName: OperatingCarrierName,
-                                OperatingCarrierNumber: OperatingCarrierNumber,
-                                AircraftModel: AirCraftModel,
-                                Duration: Duration,
-                                Baggage: Baggage
-                            };
+    //                         const SingleSegment: any = {
+    //                             DepFrom: Origin,
+    //                             DepAirport: OriginAirport,
+    //                             DepCountry: OriginCountry,
+    //                             DepTime: DepTime,
+    //                             ArrTo: Destination,
+    //                             ArrAirport: DestinationAirport,
+    //                             ArrCountry: DestinationCountry,
+    //                             ArrTime: ArrTime,
+    //                             MarkettingCarrier: MarkettingCarrier,
+    //                             MarkettingCarrierName: MarkettingCarrierName,
+    //                             MarkettingCarrierNumber: MarkettingCarrierNumber,
+    //                             OperatingCarrier: OperatingCarrier,
+    //                             OperatingCarrierName: OperatingCarrierName,
+    //                             OperatingCarrierNumber: OperatingCarrierNumber,
+    //                             AircraftModel: AirCraftModel,
+    //                             Duration: Duration,
+    //                             Baggage: Baggage
+    //                         };
 
-                            SegmentArray.push(SingleSegment);
-                        });
-                    });
+    //                         SegmentArray.push(SingleSegment);
+    //                     });
+    //                 });
 
-                    const Itenary: any = {
-                        InboundId: InboundId,
-                        OfferId: OfferId,
-                        Caree: Carrier,
-                        Emissions: Emissions,
-                        CarrierLogo: CarrierLogo,
-                        BaseFare: BaseFare,
-                        Taxes: Taxes,
-                        TotalFare: TotalFare,
-                        Currency: Currency,
-                        Passengers: Passengers,
-                        InstantPayment: PaymentType.requires_instant_payment,
-                        FareRules: FareRules,
-                        CabinClass: CabinClass,
-                        Segments: SegmentArray
-                    };
+    //                 const Itenary: any = {
+    //                     InboundId: InboundId,
+    //                     OfferId: OfferId,
+    //                     Caree: Carrier,
+    //                     Emissions: Emissions,
+    //                     CarrierLogo: CarrierLogo,
+    //                     BaseFare: BaseFare,
+    //                     Taxes: Taxes,
+    //                     TotalFare: TotalFare,
+    //                     Currency: Currency,
+    //                     Passengers: Passengers,
+    //                     InstantPayment: PaymentType.requires_instant_payment,
+    //                     FareRules: FareRules,
+    //                     CabinClass: CabinClass,
+    //                     Segments: SegmentArray
+    //                 };
 
-                    AllFlights.push(Itenary);
-                });
+    //                 AllFlights.push(Itenary);
+    //             });
 
-                return AllFlights;
-            } else { 
-                return AllFlights;
-            }
-        }catch(err){
-            console.log(err);
-        }
-    }
+    //             return AllFlights;
+    //         } else { 
+    //             return AllFlights;
+    //         }
+    //     }catch(err){
+    //         console.log(err);
+    //     }
+    // }
 
-    async SelectFare(outboundId: string, inboundId: string){
-        let config = {
-            method: 'get',
-            maxBodyLength: Infinity,
-            url: 'https://api.duffel.com/air/partial_offer_requests/prq_0000AeOtXn0busbbe0BRwW/fares?selected_partial_offer[]=off_0000AeOtXnDN9QoWHa9dpr_0&selected_partial_offer[]=off_0000AeP8ddoaC67V5CznJk_1',
-            headers: { 
-              'Accept': 'application/json', 
-              'Accept-Encoding': 'gzip', 
-              'Duffel-Version': 'v1', 
-              'Authorization': 'Bearer duffel_test_TU0YqNPxlVilWZ_SebG0ZDuFI2dEBirZxUd21xJGvIq'
-            }
-          };
+    // async SelectFare(outboundId: string, inboundId: string){
+    //     let config = {
+    //         method: 'get',
+    //         maxBodyLength: Infinity,
+    //         url: 'https://api.duffel.com/air/partial_offer_requests/prq_0000AeOtXn0busbbe0BRwW/fares?selected_partial_offer[]=off_0000AeOtXnDN9QoWHa9dpr_0&selected_partial_offer[]=off_0000AeP8ddoaC67V5CznJk_1',
+    //         headers: { 
+    //           'Accept': 'application/json', 
+    //           'Accept-Encoding': 'gzip', 
+    //           'Duffel-Version': 'v1', 
+    //           'Authorization': 'Bearer duffel_test_TU0YqNPxlVilWZ_SebG0ZDuFI2dEBirZxUd21xJGvIq'
+    //         }
+    //       };
           
-          try{
-            const response = await axios.request(config);
+    //       try{
+    //         const response = await axios.request(config);
 
-            return response.data;
-          }catch(err){
+    //         return response.data;
+    //       }catch(err){
 
-          }
+    //       }
           
 
-    }
+    // }
 
 
 

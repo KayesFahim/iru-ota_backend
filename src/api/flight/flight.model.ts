@@ -1,44 +1,54 @@
-import { IsInt, IsPositive, IsString, Length, ArrayMinSize, IsDateString, ArrayMaxSize, ValidateNested, IsEmail, IsArray, IsOptional } from 'class-validator';
+import { IsInt, IsPositive, IsString, Length, ArrayMinSize, IsDateString, ArrayMaxSize, ValidateNested, IsEmail, IsArray, IsOptional, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 class SegmentDto {
   @ApiProperty({ default: 'LHR' })
   @IsString()
+  @IsNotEmpty()
   @Length(3, 3)
-  depfrom: string;
+  departure_from: string;
 
   @ApiProperty({ default: 'JFK' })
   @IsString()
+  @IsNotEmpty()
   @Length(3, 3)
-  arrto: string;
+  arrival_to: string;
 
   @ApiProperty( { default: '2024-03-01' })
   @IsDateString()
-  depdate: string;
+  @IsNotEmpty()
+  @IsNotEmpty()
+  departure_date: string;
 }
 
 export class FlightSearchModel {
   @ApiProperty({ default: 1 })
   @IsInt()
   @IsPositive()
-  adultcount: number;
+  @IsNotEmpty()
+  adult_count: number;
 
   @ApiProperty({ default: 0 })
   @IsInt()
-  childcount: number;
+  @IsNotEmpty()
+  child_count: number;
 
   @ApiProperty({ default: 0 })
   @IsInt()
-  infantcount: number;
+  @IsNotEmpty()
+  infant_count: number;
 
-//   @ApiProperty({ default: 2 })
-//   @IsInt()
-//   connection: number;
+  @ApiProperty({ default: 2 })
+  @IsInt()
+  @IsPositive()
+  @IsNotEmpty()
+  connection: number;
 
   @ApiProperty({ default: 'Economy' })
+  @IsNotEmpty()
   @IsString()
   @Length(1, 1)
-  cabinclass: string = 'economy';
+  cabin_class: string = 'economy';
 
   @ApiProperty({ type: [SegmentDto] })
   @ArrayMinSize(1)
