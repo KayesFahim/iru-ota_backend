@@ -87,7 +87,7 @@ export class DuffelService {
                 'Authorization': 'Bearer '+`${process.env.DUFFEL_TOKEN_TEST}`
               },
             data : data
-          };
+        };
 
 
         try{
@@ -102,17 +102,65 @@ export class DuffelService {
 
     async AirPrice(OfferId: string){
 
-        const duffel = new Duffel({token: `${process.env.DUFFEL_TOKEN_TEST}`})
-          
-        const data = duffel.offers.get(OfferId, {
-            "return_available_services": true
-        })
+        let config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: `${process.env.DUFFEL_SINGLE_OFFER}`+`/${OfferId}?return_available_services=true`,
+            headers: { 
+                'Accept-Encoding': 'gzip', 
+                'Accept': 'application/json', 
+                'Duffel-Version': 'v1', 
+                'Content-Type': 'application/json', 
+                'Authorization': 'Bearer '+`${process.env.DUFFEL_TOKEN_TEST}`
+              }
+        };
 
-        return await this.DuffelParserAirPrice(data);
+
+        try{
+            const response = await axios.request(config);
+            const result= response.data; 
+            return await this.DuffelParserAirPrice(result);
+            
+        }catch(err){
+            console.log(err);
+        }
 
     }
 
     async AirBooking(createBookingDto : BookingModel){
+
+        const Passenger = createBookingDto.passengers;
+        const OfferId = createBookingDto.offer_id;
+
+        const data = {
+            "data": {
+              "type": "hold",
+              "selected_offers": [OfferId],
+              "passengers": Passenger
+            }
+        };
+
+        //return data;
+
+        
+        let config = {
+            method: 'post',
+            maxBodyLength: Infinity,
+            url: process.env.DUFFEL_CREATE_ORDER,
+            headers: { 
+                'Accept-Encoding': 'gzip', 
+                'Accept': 'application/json', 
+                'Duffel-Version': 'v1', 
+                'Content-Type': 'application/json', 
+                'Authorization': 'Bearer '+`${process.env.DUFFEL_TOKEN_TEST}`
+              },
+            data : data
+        };
+
+            const response = await axios.request(config);
+            console.log(response); 
+            return response.data;
+        
 
     }
 
@@ -219,10 +267,8 @@ export class DuffelService {
 
     async DuffelParserAirPrice(result : any){
 
-        return result.data;
-
         const FlightOffer = result.data || [];
-        const OfferId: string = '';
+        const OfferId: string = FlightOffer.offer_id;
         const Emissions: string = FlightOffer.total_emissions_kg;
         const Currency: string = FlightOffer.base_currency;
         const Carrier: string = FlightOffer.owner.name;
