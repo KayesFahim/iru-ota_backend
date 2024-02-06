@@ -93,7 +93,7 @@ export class DuffelService {
         try{
             const response = await axios.request(config);
             const result= response.data; 
-            return result;
+            //return result;
             return await this.DuffelParserSearch(result);
             
         }catch(err){
