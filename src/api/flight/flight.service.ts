@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import { FlightSearchModel } from './flight.model';
+import { AirPriceModel, BookingModel, FlightSearchModel } from './flight.model';
 import { DuffelService } from './duffel.flight.service';
 
 @Injectable()
@@ -8,26 +8,22 @@ export class FlightService {
   constructor(
     private readonly duffelService: DuffelService
   ){}
-  async airSearch(createFlightDto: FlightSearchModel) {
-    const FlightData = await this.duffelService.airSearch(createFlightDto);
+  async AirSearch(createFlightDto: FlightSearchModel) {
+    const FlightData = await this.duffelService.AirSearch(createFlightDto);
     return FlightData;
   }
 
-  
+  async AirPrice(airPriceDto : AirPriceModel) {
+    const Supplier =  airPriceDto.suppiler;
+    if(Supplier == 'Duffel'){
+      return await this.duffelService.AirPrice(airPriceDto.offer_id);
+    }else{
+      throw new Error('Invalid Supplier');
+    }
+  }
 
-  // async OutBoundFare(createFlightDto: FlightSearchModel) {
-  //   const FlightData = await this.duffelService.OutBoundFare(createFlightDto);
-  //   return FlightData;
-  // }
-
-  // async InBoundFare(outboundId : string, offerId : string){
-  //   const FlightData = await this.duffelService.InBoundFare(outboundId, offerId);
-  //   return FlightData;
-  // }
-
-  // async SelectFare(outboundId : string, inboundId : string) {
-  //   const FlightData = await this.duffelService.SelectFare(outboundId, inboundId);
-  //   return FlightData;
-  // }                                                                                                                                                                                                                      
+  async AirBooking(createBookingDto : BookingModel) {
+    return await this.duffelService.AirBooking(createBookingDto);
+  }                                                                                                                                                                                                           
 
 }

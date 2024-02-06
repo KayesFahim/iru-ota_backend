@@ -1,4 +1,4 @@
-import { IsInt, IsPositive, IsString, Length, ArrayMinSize, IsDateString, ArrayMaxSize, ValidateNested, IsEmail, IsArray, IsOptional, IsNotEmpty } from 'class-validator';
+import { IsInt, IsPositive, IsString, Length, ArrayMinSize, IsDateString, ArrayMaxSize, ValidateNested, IsEmail, IsArray, IsOptional, IsNotEmpty, MaxLength, maxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
 class SegmentDto {
@@ -54,4 +54,24 @@ export class FlightSearchModel {
   @ArrayMinSize(1)
   @ArrayMaxSize(4)
   segments: SegmentDto[];
+}
+
+export class AirPriceModel{
+
+  @ApiProperty({ default: 'Duffel' })
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(20)
+  suppiler : string
+
+  @ApiProperty({default: 'off_00009htYpSCXrwaB9DnUm0'})
+  @IsNotEmpty()
+  @IsString()
+  @MaxLength(100)
+  offer_id : string
+
+}
+
+export class BookingModel{
+
 }
