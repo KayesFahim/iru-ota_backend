@@ -93,7 +93,7 @@ export class DuffelService {
         try{
             const response = await axios.request(config);
             const result= response.data; 
-            //return result;
+            return result;
             return await this.DuffelParserSearch(result);
             
         }catch(err){
@@ -217,7 +217,7 @@ export class DuffelService {
                         const SingleSegment: any = {
                             departure_from: Origin,
                             departure_airport: OriginAirport,
-                            departure_ountry: OriginCountry,
+                            departure_country: OriginCountry,
                             departure_time: DepTime,
                             arrival_to: Destination,
                             arrival_airport: DestinationAirport,
