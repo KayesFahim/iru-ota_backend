@@ -93,6 +93,7 @@ export class DuffelService {
         try{
             const response = await axios.request(config);
             const result= response.data; 
+            //return result;
             return await this.DuffelParserSearch(result);
             
         }catch(err){
@@ -157,10 +158,8 @@ export class DuffelService {
             data : data
         };
 
-            const response = await axios.request(config);
-            console.log(response); 
-            return response.data;
-        
+        const response = await axios.request(config);
+        return response.data;
 
     }
 
@@ -174,7 +173,7 @@ export class DuffelService {
                 const Emissions: string = FlightOffer.total_emissions_kg;
                 const Currency: string = FlightOffer.base_currency;
                 const Carrier: string = FlightOffer.owner.name;
-                const CarrierLogo: string = FlightOffer.owner.logo_symbol_url;
+                const CarrierLogo: string = FlightOffer.owner.logo_lockup_url;
                 const BaseFare : string = FlightOffer.base_amount;
                 const Taxes: string = FlightOffer.tax_amount;
                 const TotalFare: string = FlightOffer.total_amount;
@@ -202,10 +201,12 @@ export class DuffelService {
                         const ArrTime: string = Segment.arriving_at;
 
                         const MarkettingCarrier: string = Segment.marketing_carrier.iata_code;
+                        const MarkettingLogo: string = Segment.marketing_carrier.logo_symbol_url;
                         const MarkettingCarrierName: string = Segment.marketing_carrier.name;
                         const MarkettingCarrierNumber: string = Segment.marketing_carrier_flight_number;
 
                         const OperatingCarrier: string = Segment.operating_carrier.iata_code;
+                        const OperatingCarrierLogo: string = Segment.operating_carrier.logo_symbol_url;
                         const OperatingCarrierName: string = Segment.operating_carrier.name;
                         const OperatingCarrierNumber: string = Segment.operating_carrier_flight_number;
 
@@ -223,9 +224,11 @@ export class DuffelService {
                             arrival_country: DestinationCountry,
                             arrival_time: ArrTime,
                             marketting_carrier: MarkettingCarrier,
+                            marketting_carrier_logo:MarkettingLogo,
                             marketting_carrier_name: MarkettingCarrierName,
                             marketting_carrier_number: MarkettingCarrierNumber,
                             operating_carrier: OperatingCarrier,
+                            operating_carrier_logo: OperatingCarrierLogo,
                             operating_carrier_name: OperatingCarrierName,
                             operating_carrier_number: OperatingCarrierNumber,
                             aircraft_model: AirCraftModel,
@@ -272,7 +275,7 @@ export class DuffelService {
         const Emissions: string = FlightOffer.total_emissions_kg;
         const Currency: string = FlightOffer.base_currency;
         const Carrier: string = FlightOffer.owner.name;
-        const CarrierLogo: string = FlightOffer.owner.logo_symbol_url;
+        const CarrierLogo: string = FlightOffer.owner.logo_lockup_url;
         const BaseFare : string = FlightOffer.base_amount;
         const Taxes: string = FlightOffer.tax_amount;
         const TotalFare: string = FlightOffer.total_amount;
@@ -300,10 +303,12 @@ export class DuffelService {
                 const ArrTime: string = Segment.arriving_at;
 
                 const MarkettingCarrier: string = Segment.marketing_carrier.iata_code;
+                const MarkettingCarrierLogo: string = Segment.marketing_carrier.logo_symbol_url;
                 const MarkettingCarrierName: string = Segment.marketing_carrier.name;
                 const MarkettingCarrierNumber: string = Segment.marketing_carrier_flight_number;
 
                 const OperatingCarrier: string = Segment.operating_carrier.iata_code;
+                const OperatingCarrierLogo: string = Segment.operating_carrier.logo_symbol_url;
                 const OperatingCarrierName: string = Segment.operating_carrier.name;
                 const OperatingCarrierNumber: string = Segment.operating_carrier_flight_number;
 
@@ -321,9 +326,11 @@ export class DuffelService {
                     arrival_country: DestinationCountry,
                     arrival_time: ArrTime,
                     marketting_carrier: MarkettingCarrier,
+                    marketting_carrier_logo: MarkettingCarrierLogo,
                     marketting_carrier_name: MarkettingCarrierName,
                     marketting_carrier_number: MarkettingCarrierNumber,
                     operating_carrier: OperatingCarrier,
+                    operating_carrier_logo: OperatingCarrierLogo,
                     operating_carrier_name: OperatingCarrierName,
                     operating_carrier_number: OperatingCarrierNumber,
                     aircraft_model: AirCraftModel,
