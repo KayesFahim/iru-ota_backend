@@ -181,8 +181,8 @@ export class DuffelService {
         try{
             const response = await axios.request(config);
             const result= response.data; 
-            return result;
-            //return await this.DuffelParserSearch(result);
+            //return result;
+            return await this.DuffelParserSearch(result);
             
         }catch(err){
             console.log(err);
@@ -274,6 +274,7 @@ export class DuffelService {
                         const AirCraftModel: string = Segment.aircraft?.name || '';
                         const Duration: number = Segment.duration;
                         const Baggage: any = Segment.passengers[0].baggages;
+                        const Amenities: any = Segment.passengers[0].cabin.amenities;
 
                         const SingleSegment: any = {
                             departure_from: Origin,
@@ -294,7 +295,8 @@ export class DuffelService {
                             operating_carrier_number: OperatingCarrierNumber,
                             aircraft_model: AirCraftModel,
                             duration: Duration,
-                            baggage: Baggage
+                            baggage: Baggage,
+                            amenities: Amenities
                         };
 
                         AllSegments.push(SingleSegment);
