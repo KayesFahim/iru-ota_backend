@@ -44,11 +44,11 @@ export class FlightSearchModel {
   @IsNotEmpty()
   connection: number;
 
-  @ApiProperty({ default: 'Economy' })
+  @ApiProperty({ default: 'Any' })
   @IsNotEmpty()
   @IsString()
   @Length(1, 1)
-  cabin_class: string = 'economy';
+  cabin_class: string = '';
 
   @ApiProperty({ type: [SegmentDto] })
   @ArrayMinSize(1)

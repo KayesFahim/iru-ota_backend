@@ -13,7 +13,7 @@ export class DuffelService {
         const AdultCount = createFlightDto.adult_count;
         const ChildCount = createFlightDto.child_count;
         const InfantCount = createFlightDto.infant_count;
-        const Class = createFlightDto.cabin_class;
+        const Class = (createFlightDto.cabin_class === 'Any') ? '' : createFlightDto.cabin_class;
         const Connection  = createFlightDto.connection;
 
         const SliceArray = Slices.map((slics: any) => ({
@@ -163,6 +163,60 @@ export class DuffelService {
 
     }
 
+    async AirGetBooking(OrderId: string){
+        let config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: `${process.env.DUFFEL_CREATE_ORDER}/${OrderId}`,
+            headers: { 
+                'Accept-Encoding': 'gzip', 
+                'Accept': 'application/json', 
+                'Duffel-Version': 'v1', 
+                'Content-Type': 'application/json', 
+                'Authorization': 'Bearer '+`${process.env.DUFFEL_TOKEN_TEST}`
+            },
+        };
+
+
+        try{
+            const response = await axios.request(config);
+            const result= response.data; 
+            return result;
+            //return await this.DuffelParserSearch(result);
+            
+        }catch(err){
+            console.log(err);
+        }
+
+    }
+
+    async AirExtraService(OrderId: string){
+        let config = {
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: `${process.env.DUFFEL_CREATE_ORDER}/${OrderId}/available_services`,
+            headers: { 
+                'Accept-Encoding': 'gzip', 
+                'Accept': 'application/json', 
+                'Duffel-Version': 'v1', 
+                'Content-Type': 'application/json', 
+                'Authorization': 'Bearer '+`${process.env.DUFFEL_TOKEN_TEST}`
+            },
+        };
+
+
+        try{
+            const response = await axios.request(config);
+            const result= response.data; 
+            return result;
+            // return await this.DuffelParserSearch(result);
+            
+        }catch(err){
+            console.log(err);
+        }
+
+    }
+
     async DuffelParserSearch(result : any){
 
         const FlightOffers = result.data.offers || [];
@@ -185,9 +239,16 @@ export class DuffelService {
 
                 const SegmentArray: any[] = [];
 
+                let i=0;
                 AllSegmentData.forEach((LegSegmentData: any) => {
+                    i++;
+                    const SingleLeg = {
+                        //"fare_brand_name": AllSegmentData[i-1].fare_brand_name,
+                        "total_duration": AllSegmentData[i-1].duration,
+                        //"conditions": AllSegmentData[i-1].conditions,
+                    };
                     const SegmentData: any[] = LegSegmentData.segments;
-
+                    const AllSegments: any[] = [];
                     SegmentData.forEach((Segment: any) => {
                         const Origin: string = Segment.origin.iata_code;
                         const OriginAirport: string = Segment.origin.name;
@@ -236,8 +297,11 @@ export class DuffelService {
                             baggage: Baggage
                         };
 
-                        SegmentArray.push(SingleSegment);
+                        AllSegments.push(SingleSegment);
                     });
+
+                    SingleLeg['segment_data'] = AllSegments;
+                    SegmentArray.push(SingleLeg);
                 });
 
                 const Itenary: any = {

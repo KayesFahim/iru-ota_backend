@@ -24,6 +24,14 @@ export class FlightService {
 
   async AirBooking(createBookingDto : BookingModel) {
     return await this.duffelService.AirBooking(createBookingDto);
-  }                                                                                                                                                                                                           
+  } 
+  
+  async AirGetBooking(OfferId: string) {
+    return await this.duffelService.AirGetBooking(OfferId);
+  }
+
+  async AirExtraService(OfferId: string) {
+    return await this.duffelService.AirExtraService(OfferId);
+  }
 
 }
