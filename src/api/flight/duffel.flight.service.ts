@@ -237,6 +237,8 @@ export class DuffelService {
                 const AllSegmentData: any[] = FlightOffer.slices;
                 const CabinClass: string = AllSegmentData[0].segments[0].passengers[0].cabin_class_marketing_name;
 
+                const FareBrandName: string =  AllSegmentData[0].fare_brand_name;
+                const Conditions: string = AllSegmentData[0].conditions;
                 const SegmentArray: any[] = [];
 
                 let i=0;
@@ -320,15 +322,21 @@ export class DuffelService {
                     instant_payment: PaymentType.requires_instant_payment,
                     fare_rules: FareRules,
                     cabin_class: CabinClass,
+                    fare_brand_name: FareBrandName,
+                    conditions: Conditions,
                     segments: SegmentArray
                 };
 
-                AllFlights.push(Itenary);
+                const foundFlight = AllFlights.find(flight => flight.carrier === Carrier 
+                    && flight.fare_brand_name === FareBrandName);
+
+                if (!foundFlight) {
+                    AllFlights.push(Itenary);                 
+                }
             });
 
             return AllFlights;
         } else {
-            
             return AllFlights;
         }
 
